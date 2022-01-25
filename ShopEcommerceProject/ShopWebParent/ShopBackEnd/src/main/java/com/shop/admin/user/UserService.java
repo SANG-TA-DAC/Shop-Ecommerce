@@ -5,14 +5,29 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.shop.common.entity.Role;
 import com.shop.common.entity.User;
 
 @Service
 public class UserService {
 	@Autowired
-	private UserRepository repo;
+	private UserRepository userRepo;
 	
+	@Autowired
+	private RoleRepository roleRepo;
+	
+	// show list all Users
 	public List<User> listAll(){
-		return (List<User>) repo.findAll();
+		return (List<User>) userRepo.findAll();
+	}
+	
+	// show list all Roles
+	public List<Role> listRoles(){
+		return (List<Role>) roleRepo.findAll();
+	}
+	
+	// create a new User
+	public void save(User user) {
+		userRepo.save(user);
 	}
 }
