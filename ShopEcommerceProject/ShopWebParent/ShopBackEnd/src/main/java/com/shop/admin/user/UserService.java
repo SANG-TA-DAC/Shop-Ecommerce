@@ -36,13 +36,22 @@ public class UserService {
 		return (List<User>) userRepo.findAll();
 	}
 
-	public Page<User> listByPage(int pageNum, String sortField, String sortDir) {
+	public Page<User> listByPage(
+			int pageNum, 
+			String sortField, 
+			String sortDir, 
+			String keyword
+			) {
 		Sort sort = Sort.by(sortField);
-		
+
 		sort = sortDir.equals("asc") ? sort.ascending() : sort.descending();
-		
+
 		Pageable pageable = PageRequest.of(pageNum - 1, USERS_PER_PAGE, sort);
-		
+
+		if (keyword != null) {
+			return userRepo.findAll(keyword, pageable);
+		}
+
 		return userRepo.findAll(pageable);
 	}
 
@@ -73,7 +82,10 @@ public class UserService {
 		user.setPassword(encodePassword);
 	}
 
-	public boolean isEmailUnique(Integer id, String email) {
+	public boolean isEmailUnique(
+			Integer id, 
+			String email
+			) {
 		User userByEmail = userRepo.getUserByEmail(email);
 
 		if (userByEmail == null)
@@ -108,7 +120,10 @@ public class UserService {
 		userRepo.deleteById(id);
 	}
 
-	public void updateUserEnabledStatus(Integer id, boolean enabled) {
+	public void updateUserEnabledStatus(
+			Integer id, 
+			boolean enabled
+			) {
 		userRepo.updateEnabledStatus(id, enabled);
 	}
 }

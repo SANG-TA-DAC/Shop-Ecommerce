@@ -27,14 +27,19 @@ public class UserController {
 
 	@GetMapping("/users")
 	public String listFirstPage(Model model) {
-		return listByPage(1, model, "firstName", "asc");
+		return listByPage(1, model, "firstName", "asc", null);
 	}
 
 	@GetMapping("/users/page/{pageNum}")
-	public String listByPage(@PathVariable(name = "pageNum") int pageNum, Model model,
-			@Param("sortField") String sortField, @Param("sortDir") String sortDir) {
+	public String listByPage(
+			@PathVariable(name = "pageNum") int pageNum,
+			Model model,
+			@Param("sortField") String sortField, 
+			@Param("sortDir") String sortDir,
+			@Param("keyword") String keyword
+			) {
 
-		Page<User> page = service.listByPage(pageNum, sortField, sortDir);
+		Page<User> page = service.listByPage(pageNum, sortField, sortDir,keyword);
 		List<User> listUsers = page.getContent();
 
 		long startCount = (pageNum - 1) * UserService.USERS_PER_PAGE + 1;
@@ -55,6 +60,8 @@ public class UserController {
 		model.addAttribute("sortField", sortField);
 		model.addAttribute("sortDir", sortDir);
 		model.addAttribute("reverseSortDir", reverseSortDir);
+		
+		model.addAttribute("keyword", keyword);
 
 		return "users";
 	}
@@ -74,8 +81,11 @@ public class UserController {
 	}
 
 	@PostMapping("/users/save")
-	public String saveUser(User user, RedirectAttributes redirectAttributes,
-			@RequestParam("image") MultipartFile multipartFile) throws IOException {
+	public String saveUser(
+			User user, 
+			RedirectAttributes redirectAttributes,
+			@RequestParam("image") MultipartFile multipartFile
+			) throws IOException {
 
 		if (!multipartFile.isEmpty()) {
 			String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
@@ -96,7 +106,11 @@ public class UserController {
 	}
 
 	@GetMapping("/users/edit/{id}")
-	public String editUser(@PathVariable(name = "id") Integer id, Model model, RedirectAttributes redirectAttributes) {
+	public String editUser(
+			@PathVariable(name = "id") Integer id, 
+			Model model, 
+			RedirectAttributes redirectAttributes
+			) {
 		try {
 			User user = service.get(id);
 			List<Role> listRoles = service.listRoles();
@@ -113,8 +127,11 @@ public class UserController {
 	}
 
 	@GetMapping("/users/delete/{id}")
-	public String deleteUser(@PathVariable(name = "id") Integer id, Model model,
-			RedirectAttributes redirectAttributes) {
+	public String deleteUser(
+			@PathVariable(name = "id") Integer id, 
+			Model model,
+			RedirectAttributes redirectAttributes
+			) {
 		try {
 			service.delete(id);
 			redirectAttributes.addFlashAttribute("message", "The user ID " + id + "has been deleted successfully");
@@ -125,8 +142,11 @@ public class UserController {
 	}
 
 	@GetMapping("/users/{id}/enabled/{status}")
-	public String updateUserEnabledStatus(@PathVariable("id") Integer id, @PathVariable("status") boolean enabled,
-			RedirectAttributes redirectAttributes) {
+	public String updateUserEnabledStatus(
+			@PathVariable("id") Integer id, 
+			@PathVariable("status") boolean enabled,
+			RedirectAttributes redirectAttributes
+			) {
 		service.updateUserEnabledStatus(id, enabled);
 		String status = enabled ? "enabled" : "disabled";
 		String message = "The user ID " + id + "has been " + status;
