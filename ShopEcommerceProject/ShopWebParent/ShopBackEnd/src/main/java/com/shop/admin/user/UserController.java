@@ -44,6 +44,7 @@ public class UserController {
 
 		long startCount = (pageNum - 1) * UserService.USERS_PER_PAGE + 1;
 		long endCount = startCount + UserService.USERS_PER_PAGE - 1;
+		
 		if (endCount > page.getTotalElements()) {
 			endCount = page.getTotalElements();
 		}
@@ -101,8 +102,16 @@ public class UserController {
 				user.setPhotos(null);
 			service.save(user);
 		}
+		
 		redirectAttributes.addFlashAttribute("message", "The user has been saved successfully.");
-		return "redirect:/users";
+		
+		return getRedirectURLtoAffectedUser(user);
+		
+	}
+
+	private String getRedirectURLtoAffectedUser(User user) {
+		String firstPartOfEmail = user.getEmail().split("@")[0];
+		return "redirect:/users/page/1?sortField=id&sortDir=asc&keyword=" + firstPartOfEmail;
 	}
 
 	@GetMapping("/users/edit/{id}")
@@ -111,6 +120,7 @@ public class UserController {
 			Model model, 
 			RedirectAttributes redirectAttributes
 			) {
+		
 		try {
 			User user = service.get(id);
 			List<Role> listRoles = service.listRoles();
@@ -124,6 +134,7 @@ public class UserController {
 			redirectAttributes.addFlashAttribute("message", ex.getMessage());
 			return "redirect:/users";
 		}
+		
 	}
 
 	@GetMapping("/users/delete/{id}")
@@ -132,13 +143,16 @@ public class UserController {
 			Model model,
 			RedirectAttributes redirectAttributes
 			) {
+		
 		try {
 			service.delete(id);
 			redirectAttributes.addFlashAttribute("message", "The user ID " + id + "has been deleted successfully");
 		} catch (UserNotFoundException ex) {
 			redirectAttributes.addFlashAttribute("message", ex.getMessage());
 		}
+		
 		return "redirect:/users";
+		
 	}
 
 	@GetMapping("/users/{id}/enabled/{status}")
@@ -147,11 +161,14 @@ public class UserController {
 			@PathVariable("status") boolean enabled,
 			RedirectAttributes redirectAttributes
 			) {
+		
 		service.updateUserEnabledStatus(id, enabled);
 		String status = enabled ? "enabled" : "disabled";
 		String message = "The user ID " + id + "has been " + status;
 		redirectAttributes.addFlashAttribute("message", message);
 
 		return "redirect:/users";
+		
 	}
+	
 }
