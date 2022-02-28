@@ -1,4 +1,4 @@
-package com.shop.admin.user;
+package com.shop.admin.user.export;
 
 import java.io.IOException;
 import java.util.List;
@@ -9,6 +9,7 @@ import org.supercsv.io.CsvBeanWriter;
 import org.supercsv.io.ICsvBeanWriter;
 import org.supercsv.prefs.CsvPreference;
 
+import com.shop.admin.user.AbstractExporter;
 import com.shop.common.entity.User;
 
 public class UserCsvExporter extends AbstractExporter {

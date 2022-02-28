@@ -1,4 +1,4 @@
-package com.shop.admin.user;
+package com.shop.admin.user.export;
 
 import java.io.IOException;
 import java.util.List;
@@ -14,6 +14,7 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import com.shop.admin.user.AbstractExporter;
 import com.shop.common.entity.User;
 
 public class UserExcelExporter extends AbstractExporter{
