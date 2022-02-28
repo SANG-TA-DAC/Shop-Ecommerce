@@ -1,4 +1,4 @@
-package com.shop.admin.user;
+package com.shop.admin.user.controller;
 
 import java.io.IOException;
 
@@ -15,6 +15,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.shop.admin.FileUploadUtil;
 import com.shop.admin.security.ShopUserDetails;
+import com.shop.admin.user.UserService;
 import com.shop.common.entity.User;
 
 @Controller
@@ -32,7 +33,7 @@ public class AccountController {
 		User user = service.getByEmail(email);
 		model.addAttribute("user", user);
 		
-		return "account_form";
+		return "users/account_form";
 	}
 	
 	@PostMapping("/account/update")

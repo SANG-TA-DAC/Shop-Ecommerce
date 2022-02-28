@@ -1,4 +1,4 @@
-package com.shop.admin.user;
+package com.shop.admin.user.controller;
 
 import java.io.IOException;
 import java.util.List;
@@ -19,6 +19,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.shop.admin.FileUploadUtil;
+import com.shop.admin.user.UserNotFoundException;
+import com.shop.admin.user.UserService;
 import com.shop.admin.user.export.UserCsvExporter;
 import com.shop.admin.user.export.UserExcelExporter;
 import com.shop.admin.user.export.UserPdfExporter;
@@ -32,7 +34,7 @@ public class UserController {
 
 	@GetMapping("/users")
 	public String listFirstPage(Model model) {
-		return listByPage(1, model, "firstName", "asc", null);
+		return listByPage(1, model, "id", "asc", null);
 	}
 
 	@GetMapping("/users/page/{pageNum}")
@@ -69,7 +71,7 @@ public class UserController {
 		
 		model.addAttribute("keyword", keyword);
 
-		return "users";
+		return "users/users";
 	}
 
 	@GetMapping("/users/new")
@@ -83,7 +85,7 @@ public class UserController {
 		model.addAttribute("listRoles", listRoles);
 		model.addAttribute("pageTitle", "Create New User");
 
-		return "user_form";
+		return "users/user_form";
 	}
 
 	@PostMapping("/users/save")
@@ -134,7 +136,7 @@ public class UserController {
 			model.addAttribute("pageTitle", "Edit User (ID: " + id + ")");
 			model.addAttribute("listRoles", listRoles);
 
-			return "user_form";
+			return "users/user_form";
 		} catch (UserNotFoundException ex) {
 			redirectAttributes.addFlashAttribute("message", ex.getMessage());
 			return "redirect:/users";
