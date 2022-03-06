@@ -2,6 +2,7 @@ package com.shop.admin.category;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.List;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
@@ -46,7 +47,7 @@ public class CategoryRepositoryTests {
 		Set<Category> children = category.getChildren();
 
 		for (Category subCategory : children) {
-			System.out.println("--" + subCategory.getName());
+				System.out.println("--" + subCategory.getName());
 		}
 
 		assertThat(children.size()).isGreaterThan(0);
@@ -58,13 +59,13 @@ public class CategoryRepositoryTests {
 
 		for (Category category : categories) {
 			if (category.getParent() == null) {
-				System.out.println(category.getName());
-
-				Set<Category> children = category.getChildren();
+					System.out.println(category.getName());
+	
+					Set<Category> children = category.getChildren();
 
 				for (Category subCategory : children) {
-					System.out.println("--" + subCategory.getName());
-					printChildren(subCategory, 1);
+						System.out.println("--" + subCategory.getName());
+						printChildren(subCategory, 1);
 				}
 			}
 		}
@@ -76,12 +77,18 @@ public class CategoryRepositoryTests {
 
 		for (Category subCategory : children) {
 			for (int i = 0; i < newSubLevel; i++) {
-				System.out.print("--");
+					System.out.print("--");
 			}
 			
-			System.out.println(subCategory.getName());
-			
-			printChildren(subCategory, newSubLevel);
+				System.out.println(subCategory.getName());
+				
+				printChildren(subCategory, newSubLevel);
 		}
+	}
+	
+	@Test
+	public void testListRootCategories() {
+		List<Category> rootCategories = repo.findRootCategories();
+		rootCategories.forEach(cat -> System.out.println(cat.getName()));
 	}
 }
