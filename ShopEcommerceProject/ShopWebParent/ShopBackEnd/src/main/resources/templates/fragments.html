@@ -66,7 +66,7 @@
 			title="Disable this category"
 			></a>
 
-		<a th:if="${cat.enabled == false}" class="fas fa-circle fa-2x icon-dark" 
+		<a th:if="${cat.enabled == false}" class="fas fa-times-circle fa-2x icon-red" 
 			th:href="@{'/categories/' + ${cat.id} + '/enabled/true'}"
 			title="Enable this category"
 			></a>	
